@@ -36,14 +36,14 @@ public class Task {
     private Status status;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @PrePersist
     protected void onCreate(){
-        this.createAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
         if (this.status == null) this.status = Status.PENDING;
     }
 }
