@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +17,7 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Task findById(UUID id){
+    public Task findById(Long id){
         return taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
     }
@@ -27,7 +26,7 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public Task update (UUID id, Task updatedTask){
+    public Task update(Long id, Task updatedTask){
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
         existingTask.setTitle(updatedTask.getTitle());
@@ -37,7 +36,7 @@ public class TaskService {
         return taskRepository.save(existingTask);
     }
 
-    public void delete (UUID id){
+    public void delete(Long id){
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
         taskRepository.delete(task);
