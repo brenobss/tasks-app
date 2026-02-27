@@ -1,5 +1,6 @@
 package com.brenodev.tasks.service;
 
+import com.brenodev.tasks.exception.ResourceNotFoundException;
 import com.brenodev.tasks.model.Task;
 import com.brenodev.tasks.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class TaskService {
 
     public Task findById(Long id){
         return taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
     }
 
     public Task save(Task task){
@@ -28,7 +29,7 @@ public class TaskService {
 
     public Task update(Long id, Task updatedTask){
         Task existingTask = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
         existingTask.setTitle(updatedTask.getTitle());
         existingTask.setDescription(updatedTask.getDescription());
         existingTask.setPriority(updatedTask.getPriority());
@@ -38,7 +39,7 @@ public class TaskService {
 
     public void delete(Long id){
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
         taskRepository.delete(task);
     }
 }

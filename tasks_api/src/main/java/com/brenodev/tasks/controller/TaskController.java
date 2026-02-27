@@ -3,6 +3,7 @@ package com.brenodev.tasks.controller;
 import com.brenodev.tasks.model.Task;
 import com.brenodev.tasks.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody Task task){
-        return ResponseEntity.status(201).body(taskService.save(task));
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskService.save(task));
     }
 
     @PutMapping("/{id}")

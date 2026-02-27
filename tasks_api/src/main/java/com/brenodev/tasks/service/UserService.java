@@ -1,5 +1,6 @@
 package com.brenodev.tasks.service;
 
+import com.brenodev.tasks.exception.ResourceNotFoundException;
 import com.brenodev.tasks.model.User;
 import com.brenodev.tasks.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class UserService {
 
     public User findById(Long id){
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     public User save(User user){
@@ -28,7 +29,7 @@ public class UserService {
 
     public User update(Long id, User updatedUser){
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         existingUser.setEmail(updatedUser.getEmail());
         existingUser.setName(updatedUser.getName());
         existingUser.setPassword(updatedUser.getPassword());
@@ -37,7 +38,7 @@ public class UserService {
 
     public void delete(Long id){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         userRepository.delete(user);
     }
 }
