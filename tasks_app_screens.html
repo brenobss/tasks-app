@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tasks App - Telas</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #242424;
+    --accent: #c8f064;
+    --accent2: #f0c864;
+    --text: #f0ede8;
+    --text-muted: #888;
+    --border: #2e2e2e;
+    --danger: #ff6b6b;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 48px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .screens {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .screen-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .screen-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .phone {
+    width: 260px;
+    height: 540px;
+    background: var(--surface);
+    border-radius: 36px;
+    border: 2px solid var(--border);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  }
+
+  /* Notch */
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    z-index: 10;
+  }
+
+  .screen {
+    width: 100%;
+    height: 100%;
+    padding: 36px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── LOGIN ── */
+  .login-screen {
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .login-logo {
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .login-logo .icon {
+    font-size: 2.4rem;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .login-logo h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--text);
+  }
+
+  .login-logo p {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .field label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .field input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0f0f0f;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    margin-top: 4px;
+  }
+
+  .link-text {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+
+  .link-text span {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ── CADASTRO ── */
+  .register-screen {
+    gap: 14px;
+  }
+
+  .screen-header {
+    margin-bottom: 4px;
+  }
+
+  .screen-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    line-height: 1.2;
+  }
+
+  .screen-header p {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  /* ── LISTA ── */
+  .list-screen {
+    gap: 14px;
+  }
+
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .list-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+  }
+
+  .list-header p {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #0f0f0f;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 8px;
+  }
+
+  .tab {
+    font-size: 0.65rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .tab.active {
+    background: var(--accent);
+    color: #0f0f0f;
+    border-color: var(--accent);
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .task-item {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .task-item.done {
+    opacity: 0.5;
+  }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+  }
+
+  .checkbox.checked {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0f0f0f;
+  }
+
+  .task-info h4 {
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .task-info.done h4 {
+    text-decoration: line-through;
+  }
+
+  .task-info p {
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .task-tag {
+    margin-left: auto;
+    font-size: 0.55rem;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: rgba(200, 240, 100, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(200, 240, 100, 0.2);
+    flex-shrink: 0;
+  }
+
+  .task-tag.pending {
+    background: rgba(240, 200, 100, 0.1);
+    color: var(--accent2);
+    border-color: rgba(240, 200, 100, 0.2);
+  }
+
+  .fab {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    background: var(--accent);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: #0f0f0f;
+    font-weight: 300;
+    box-shadow: 0 4px 20px rgba(200,240,100,0.3);
+  }
+
+  /* ── CRIAR TAREFA ── */
+  .create-screen {
+    gap: 16px;
+  }
+
+  .back-btn {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .back-btn span {
+    font-size: 0.9rem;
+  }
+
+  textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-size: 0.78rem;
+    font-family: 'DM Sans', sans-serif;
+    resize: none;
+    height: 80px;
+  }
+
+  .priority-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .priority-row label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .priority-options {
+    display: flex;
+    gap: 8px;
+  }
+
+  .priority-opt {
+    flex: 1;
+    padding: 7px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+  }
+
+  .priority-opt.selected {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,240,100,0.08);
+  }
+
+  .spacer { flex: 1; }
+</style>
+</head>
+<body>
+
+<h1>Tasks App</h1>
+<p class="subtitle">Protótipo de telas — Flutter + Spring Boot</p>
+
+<div class="screens">
+
+  <!-- TELA 1: LOGIN -->
+  <div class="screen-wrapper">
+    <div class="phone">
+      <div class="screen login-screen">
+        <div class="login-logo">
+          <span class="icon">✦</span>
+          <h2>Tasks</h2>
+          <p>Organize seu dia com clareza</p>
+        </div>
+        <div class="field">
+          <label>E-mail</label>
+          <input type="text" value="breno@email.com" readonly>
+        </div>
+        <div class="field">
+          <label>Senha</label>
+          <input type="password" value="••••••••" readonly>
+        </div>
+        <button class="btn-primary">Entrar</button>
+        <p class="link-text">Não tem conta? <span>Cadastre-se</span></p>
+      </div>
+    </div>
+    <span class="screen-label">01 — Login</span>
+  </div>
+
+  <!-- TELA 2: CADASTRO -->
+  <div class="screen-wrapper">
+    <div class="phone">
+      <div class="screen register-screen">
+        <div class="screen-header">
+          <h2>Criar conta</h2>
+          <p>Preencha os dados abaixo</p>
+        </div>
+        <div class="field">
+          <label>Nome</label>
+          <input type="text" value="Breno Silva" readonly>
+        </div>
+        <div class="field">
+          <label>E-mail</label>
+          <input type="text" value="breno@email.com" readonly>
+        </div>
+        <div class="field">
+          <label>Senha</label>
+          <input type="password" value="••••••••" readonly>
+        </div>
+        <div class="field">
+          <label>Confirmar senha</label>
+          <input type="password" value="••••••••" readonly>
+        </div>
+        <button class="btn-primary">Criar conta</button>
+        <p class="link-text">Já tem conta? <span>Entrar</span></p>
+      </div>
+    </div>
+    <span class="screen-label">02 — Cadastro</span>
+  </div>
+
+  <!-- TELA 3: LISTA -->
+  <div class="screen-wrapper">
+    <div class="phone" style="position:relative;">
+      <div class="screen list-screen">
+        <div class="list-header">
+          <div>
+            <h2>Minhas tarefas</h2>
+            <p>3 pendentes hoje</p>
+          </div>
+          <div class="avatar">BS</div>
+        </div>
+        <div class="filter-tabs">
+          <div class="tab active">Todas</div>
+          <div class="tab">Pendentes</div>
+          <div class="tab">Concluídas</div>
+        </div>
+        <div class="task-list">
+          <div class="task-item">
+            <div class="checkbox">
+            </div>
+            <div class="task-info">
+              <h4>Estudar Flutter</h4>
+              <p>Hoje • 25 min</p>
+            </div>
+            <div class="task-tag pending">Pendente</div>
+          </div>
+          <div class="task-item">
+            <div class="checkbox">
+            </div>
+            <div class="task-info">
+              <h4>Criar endpoints da API</h4>
+              <p>Hoje</p>
+            </div>
+            <div class="task-tag pending">Pendente</div>
+          </div>
+          <div class="task-item">
+            <div class="checkbox">
+            </div>
+            <div class="task-info">
+              <h4>Atualizar o README</h4>
+              <p>Hoje</p>
+            </div>
+            <div class="task-tag pending">Pendente</div>
+          </div>
+          <div class="task-item done">
+            <div class="checkbox checked">✓</div>
+            <div class="task-info done">
+              <h4>Criar repositório</h4>
+              <p>Ontem</p>
+            </div>
+            <div class="task-tag">Feita</div>
+          </div>
+        </div>
+      </div>
+      <div class="fab">+</div>
+    </div>
+    <span class="screen-label">03 — Lista de tarefas</span>
+  </div>
+
+  <!-- TELA 4: CRIAR TAREFA -->
+  <div class="screen-wrapper">
+    <div class="phone">
+      <div class="screen create-screen">
+        <div class="back-btn"><span>←</span> Voltar</div>
+        <div class="screen-header">
+          <h2>Nova tarefa</h2>
+          <p>Preencha os detalhes</p>
+        </div>
+        <div class="field">
+          <label>Título</label>
+          <input type="text" value="Estudar Flutter" readonly>
+        </div>
+        <div class="field">
+          <label>Descrição</label>
+          <textarea readonly>Assistir aulas do Flutterando e praticar widgets básicos...</textarea>
+        </div>
+        <div class="priority-row">
+          <label>Prioridade</label>
+          <div class="priority-options">
+            <div class="priority-opt">Baixa</div>
+            <div class="priority-opt selected">Média</div>
+            <div class="priority-opt">Alta</div>
+          </div>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn-primary">Salvar tarefa</button>
+      </div>
+    </div>
+    <span class="screen-label">04 — Nova tarefa</span>
+  </div>
+
+</div>
+
+</body>
+</html>
