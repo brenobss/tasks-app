@@ -3,6 +3,7 @@ package com.brenodev.tasks.service;
 import com.brenodev.tasks.exception.ResourceNotFoundException;
 import com.brenodev.tasks.model.Task;
 import com.brenodev.tasks.repository.TaskRepository;
+import com.brenodev.tasks.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
     public List<Task> findAll(){
         return taskRepository.findAll();
@@ -24,6 +26,8 @@ public class TaskService {
     }
 
     public Task save(Task task){
+        userRepository.findById(task.getUser().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return taskRepository.save(task);
     }
 
