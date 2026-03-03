@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   Future<bool> login(String email, String password) async {
@@ -12,6 +13,8 @@ class AuthService {
         (u) => u['email'] == email && u['password'] == password,
         orElse: () => null,
       );
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('userId', user['id']);
       return user != null;
     } else {
       return false;
