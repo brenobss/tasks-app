@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_app/screens/create_task_screen.dart';
 import 'package:task_app/services/task_service.dart';
 
 class TaskListScreen extends StatefulWidget {
@@ -29,6 +30,16 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 );
               },
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CreateTaskScreen()),
+          );
+          _loadTasks();
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 

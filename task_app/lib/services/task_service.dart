@@ -14,4 +14,28 @@ class TaskService {
       return [];
     }
   }
+
+  Future<bool> createTask(
+    String title,
+    String description,
+    String priority,
+    int userId,
+  ) async {
+    final body = jsonEncode({
+      'title': title,
+      'description': description,
+      'priority': priority,
+      'user': {'id': userId},
+    });
+    final response = await http.post(
+      Uri.parse('http://192.168.15.172:8080/tasks'),
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
