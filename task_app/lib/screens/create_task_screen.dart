@@ -26,10 +26,12 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
             controller: _titleController,
             decoration: const InputDecoration(labelText: 'Título'),
           ),
+          const SizedBox(height: 16),
           TextFormField(
             controller: _descriptionController,
             decoration: const InputDecoration(labelText: 'Descrição'),
           ),
+          const SizedBox(height: 16),
           DropdownButtonFormField<String>(
             initialValue: _selectedPriority,
             items: [
@@ -43,6 +45,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
               });
             },
           ),
+          const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
               _createTask();

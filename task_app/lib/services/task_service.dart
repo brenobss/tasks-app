@@ -38,4 +38,32 @@ class TaskService {
       return false;
     }
   }
+
+  Future<bool> updateTask(
+    String title,
+    String description,
+    String priority,
+    String status,
+    int taskId,
+    int userId,
+  ) async {
+    final body = jsonEncode({
+      'title': title,
+      'description': description,
+      'priority': priority,
+      'status': status,
+      'user': {'id': userId},
+    });
+    final response = await http.put(
+      Uri.parse('http://192.168.15.172:8080/tasks/$taskId'),
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

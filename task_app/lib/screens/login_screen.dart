@@ -26,12 +26,14 @@ class _LoginScreenState extends State<LoginScreen> {
               Text("Logo"),
               SizedBox(width: 16),
               Text('Tasks'),
+              SizedBox(height: 16),
               Text("Organize seu dia com clareza"),
             ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
@@ -40,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   prefixIcon: Icon(Icons.person),
                 ),
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
                 obscureText: true,
@@ -49,12 +52,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   prefixIcon: Icon(Icons.lock),
                 ),
               ),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   _login();
                 },
                 child: Text('Entrar'),
               ),
+              const SizedBox(height: 16),
               Text(
                 "Esqueci minha senha",
                 style: TextStyle(
@@ -62,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: TextDecoration.underline,
                 ),
               ),
+              const SizedBox(height: 16),
               Text(
                 "Novo por aqui? Cadastre-se",
                 style: TextStyle(

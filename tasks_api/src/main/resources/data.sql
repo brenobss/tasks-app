@@ -1,0 +1,2 @@
+INSERT INTO tb_users (name, email, password) VALUES ('Breno', 'breno@email.com', '123456');
+INSERT INTO tb_tasks (title, description, priority, status, created_at, user_id) VALUES ('Estudar Flutter', 'Praticar widgets básicos', 'MEDIUM', 'PENDING', NOW(), 1);
