@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_app/models/task.dart';
 import 'package:task_app/screens/create_task_screen.dart';
 import 'package:task_app/screens/edit_task_screen.dart';
 import 'package:task_app/services/task_service.dart';
@@ -12,8 +13,36 @@ class TaskListScreen extends StatefulWidget {
 
 class _TaskListScreenState extends State<TaskListScreen> {
   final _taskService = TaskService();
-  List<dynamic> _tasks = [];
+  List<Task> _tasks = [];
   bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTasks();
+  }
+
+  void _loadTasks() async {
+    final tasks = await _taskService.findAllTasks();
+    setState(() {
+      _tasks = tasks;
+      _isLoading = false;
+    });
+  }
+
+  void _completeTask(Task task) async {
+    final success = await _taskService.completeTask(task);
+    if (success) {
+      setState(() {
+        final index = _tasks.indexOf(task);
+        _tasks[index] = task.copyWith(status: 'COMPLETED');
+      });
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Erro ao concluir tarefa')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +55,32 @@ class _TaskListScreenState extends State<TaskListScreen> {
               itemBuilder: (context, index) {
                 final task = _tasks[index];
                 return ListTile(
-                  title: Text(task['title']),
-                  subtitle: Text(task['status']),
-                  onTap: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditTaskScreen(task: task),
-                      ),
-                    );
-                    _loadTasks();
-                  },
+                  title: Text(
+                    task.title,
+                    style: TextStyle(
+                      decoration: task.isCompleted
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
+                  ),
+                  subtitle: Text(task.status),
+                  leading: Checkbox(
+                    value: task.isCompleted,
+                    onChanged: task.isCompleted
+                        ? null
+                        : (_) => _completeTask(task),
+                  ),
+                  onTap: task.isCompleted
+                      ? null
+                      : () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditTaskScreen(task: task),
+                            ),
+                          );
+                          _loadTasks();
+                        },
                 );
               },
             ),
@@ -51,19 +95,5 @@ class _TaskListScreenState extends State<TaskListScreen> {
         child: const Icon(Icons.add),
       ),
     );
-  }
-
-  void _loadTasks() async {
-    final tasks = await _taskService.findAllTasks();
-    setState(() {
-      _tasks = tasks;
-      _isLoading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadTasks();
   }
 }

@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_app/models/task.dart';
 import 'package:task_app/services/task_service.dart';
 
 class EditTaskScreen extends StatefulWidget {
-  final Map<String, dynamic> task;
+  final Task task;
   const EditTaskScreen({super.key, required this.task});
 
   @override
@@ -17,6 +16,45 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   String _selectedPriority = 'MEDIUM';
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.task.title;
+    _descriptionController.text = widget.task.description;
+    _selectedPriority = widget.task.priority;
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  Future _updateTask() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getInt('userId') ?? 0;
+
+    final updatedTask = Task(
+      id: widget.task.id,
+      title: _titleController.text,
+      description: _descriptionController.text,
+      priority: _selectedPriority,
+      status: widget.task.status,
+      userId: userId,
+    );
+
+    final success = await _taskService.updateTask(updatedTask);
+
+    if (success) {
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Erro ao editar tarefa')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,52 +103,12 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                _updateTask();
-              },
+              onPressed: () => _updateTask(),
               child: Text('Salvar'),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Future _updateTask() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getInt('userId') ?? 0;
-    final taskId = widget.task['id'];
-
-    final success = await _taskService.updateTask(
-      _titleController.text,
-      _descriptionController.text,
-      _selectedPriority,
-      widget.task['status'],
-      taskId,
-      userId,
-    );
-
-    if (success) {
-      Navigator.pop(context);
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Erro ao editar tarefa')));
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _titleController.text = widget.task['title'] ?? '';
-    _descriptionController.text = widget.task['description'] ?? '';
-    _selectedPriority = widget.task['priority'] ?? '';
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descriptionController.dispose();
-    super.dispose();
   }
 }

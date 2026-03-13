@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_app/models/task.dart';
 import 'package:task_app/services/task_service.dart';
 
 class CreateTaskScreen extends StatefulWidget {
@@ -61,12 +62,14 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getInt('userId') ?? 0;
 
-    final success = await _taskService.createTask(
-      _titleController.text,
-      _descriptionController.text,
-      _selectedPriority,
-      userId,
+    final task = Task(
+      title: _titleController.text,
+      description: _descriptionController.text,
+      priority: _selectedPriority,
+      userId: userId,
     );
+
+    final success = await _taskService.createTask(task);
 
     if (success) {
       Navigator.pop(context);
