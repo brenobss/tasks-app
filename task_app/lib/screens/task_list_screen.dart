@@ -44,6 +44,54 @@ class _TaskListScreenState extends State<TaskListScreen> {
     }
   }
 
+  void _deleteTask(Task task) async {
+    final success = await _taskService.deleteTask(task.id!);
+    if (!success) {
+      _loadTasks();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Erro ao deletar tarefa')));
+    }
+  }
+
+  void _uncompleteTask(Task task) async {
+    final success = await _taskService.uncompleteTask(task);
+    if (success) {
+      setState(() {
+        final index = _tasks.indexOf(task);
+        _tasks[index] = task.copyWith(status: 'PENDING');
+      });
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Erro ao desmarcar tarefa')));
+    }
+  }
+
+  Future<bool> _showDeleteConfirmation() async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Deletar tarefa"),
+            content: const Text("Tem certeza que deseja deletar essa tarefa?"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancelar'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text(
+                  'Deletar',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,33 +102,48 @@ class _TaskListScreenState extends State<TaskListScreen> {
               itemCount: _tasks.length,
               itemBuilder: (context, index) {
                 final task = _tasks[index];
-                return ListTile(
-                  title: Text(
-                    task.title,
-                    style: TextStyle(
-                      decoration: task.isCompleted
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
+                return Dismissible(
+                  key: Key(task.id.toString()),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    color: Colors.red,
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 16),
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  confirmDismiss: (_) async {
+                    return await _showDeleteConfirmation();
+                  },
+                  onDismissed: (_) => _deleteTask(task),
+                  child: ListTile(
+                    title: Text(
+                      task.title,
+                      style: TextStyle(
+                        decoration: task.isCompleted
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                      ),
                     ),
-                  ),
-                  subtitle: Text(task.status),
-                  leading: Checkbox(
-                    value: task.isCompleted,
-                    onChanged: task.isCompleted
+                    subtitle: Text(task.status),
+                    leading: Checkbox(
+                      value: task.isCompleted,
+                      onChanged: task.isCompleted
+                          ? (_) => _uncompleteTask(task)
+                          : (_) => _completeTask(task),
+                    ),
+                    onTap: task.isCompleted
                         ? null
-                        : (_) => _completeTask(task),
+                        : () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    EditTaskScreen(task: task),
+                              ),
+                            );
+                            _loadTasks();
+                          },
                   ),
-                  onTap: task.isCompleted
-                      ? null
-                      : () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditTaskScreen(task: task),
-                            ),
-                          );
-                          _loadTasks();
-                        },
                 );
               },
             ),

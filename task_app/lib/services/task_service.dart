@@ -39,4 +39,14 @@ class TaskService {
     final completedTask = task.copyWith(status: 'COMPLETED');
     return updateTask(completedTask);
   }
+
+  Future<bool> deleteTask(int id) async {
+    final response = await http.delete(Uri.parse('$_baseUrl/$id'));
+    return response.statusCode == 204;
+  }
+
+  Future<bool> uncompleteTask(Task task) async {
+    final pendingTask = task.copyWith(status: 'PENDING');
+    return updateTask(pendingTask);
+  }
 }
