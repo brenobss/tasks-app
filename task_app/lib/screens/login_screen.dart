@@ -17,67 +17,95 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Column(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Logo"),
-              SizedBox(width: 16),
-              Text('Tasks'),
-              SizedBox(height: 16),
-              Text("Organize seu dia com clareza"),
-            ],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Usuário',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
+              const Spacer(),
+              Center(
+                child: Column(
+                  children: [
+                    const Icon(
+                      Icons.auto_awesome,
+                      color: Color(0xFFCCFF00),
+                      size: 48,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Tasks',
+                      style: Theme.of(context).textTheme.displayLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Organize seu dia com clareza',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
+              const Spacer(),
+              const Text(
+                'E-MAIL',
+                style: TextStyle(
+                  fontSize: 11,
+                  letterSpacing: 1.5,
+                  color: Color(0xFFAAAAAA),
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'SENHA',
+                style: TextStyle(
+                  fontSize: 11,
+                  letterSpacing: 1.5,
+                  color: Color(0xFFAAAAAA),
+                ),
+              ),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Senha',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.lock),
-                ),
+                decoration: const InputDecoration(),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 32),
               ElevatedButton(
-                onPressed: () {
-                  _login();
-                },
-                child: Text('Entrar'),
+                onPressed: () => _login(),
+                child: const Text('Entrar'),
               ),
-              const SizedBox(height: 16),
-              Text(
-                "Esqueci minha senha",
-                style: TextStyle(
-                  color: Colors.blue,
-                  decoration: TextDecoration.underline,
+              const SizedBox(height: 24),
+              Center(
+                child: GestureDetector(
+                  onTap: () {}, // navegação para cadastro — faremos a seguir
+                  child: RichText(
+                    text: const TextSpan(
+                      text: 'Não tem conta? ',
+                      style: TextStyle(color: Color(0xFFAAAAAA)),
+                      children: [
+                        TextSpan(
+                          text: 'Cadastre-se',
+                          style: TextStyle(
+                            color: Color(0xFFCCFF00),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(height: 16),
-              Text(
-                "Novo por aqui? Cadastre-se",
-                style: TextStyle(
-                  color: Colors.blue,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
+              const Spacer(),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -88,16 +116,15 @@ class _LoginScreenState extends State<LoginScreen> {
       _passwordController.text,
     );
 
-    if (success) {
+    if (success)
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const TaskListScreen()),
       );
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Email ou senha incorretos')));
-    }
+    else
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Email ou senha incorretos')),
+      );
   }
 
   @override

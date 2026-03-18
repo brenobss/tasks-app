@@ -43,6 +43,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       priority: _selectedPriority,
       status: widget.task.status,
       userId: userId,
+      createdAt: widget.task.createdAt,
     );
 
     final success = await _taskService.updateTask(updatedTask);
@@ -59,56 +60,100 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Editar tarefa")),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText: "Título",
-                border: OutlineInputBorder(),
+      appBar: AppBar(
+        title: const Text(
+          "Editar tarefa",
+          style: TextStyle(fontFamily: 'serif', fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('TÍTULO', style: _labelStyle),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                  hintText: 'Ex: Estudar programação',
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _descriptionController,
-              decoration: InputDecoration(
-                labelText: "Descrição",
-                border: OutlineInputBorder(),
+              const SizedBox(height: 24),
+              const Text('DESCRIÇÃO', style: _labelStyle),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _descriptionController,
+                decoration: const InputDecoration(
+                  hintText: 'Adicione detalhes da tarefa...',
+                ),
+                maxLines: 4,
               ),
-              maxLines: 4,
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              initialValue: _selectedPriority,
-              decoration: InputDecoration(
-                labelText: "Prioridade",
-                border: OutlineInputBorder(),
+              const SizedBox(height: 24),
+              const Text('PRIORIDADE', style: _labelStyle),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  _buildPriorityButton('LOW', 'Baixa'),
+                  const SizedBox(width: 12), // Corrigido de height para width
+                  _buildPriorityButton('MEDIUM', 'Média'),
+                  const SizedBox(width: 12), // Corrigido de height para width
+                  _buildPriorityButton('HIGH', 'Alta'),
+                ],
               ),
-              items: ['LOW', 'MEDIUM', 'HIGH']
-                  .map(
-                    (priority) => DropdownMenuItem(
-                      value: priority,
-                      child: Text(priority),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedPriority = value!;
-                });
-              },
+              const SizedBox(height: 48),
+              ElevatedButton(
+                onPressed: () => _updateTask(),
+                child: const Text('Salvar alterações'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPriorityButton(String value, String label) {
+    final isSelected = _selectedPriority == value;
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedPriority = value;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.transparent : const Color(0xFF2A2A2A),
+            border: Border.all(
+              color: isSelected ? const Color(0xFFCCFF00) : Colors.transparent,
+              width: 1.5,
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => _updateTask(),
-              child: Text('Salvar'),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            label,
+            style: TextStyle(
+              color: isSelected
+                  ? const Color(0xFFCCFF00)
+                  : const Color(0xFFAAAAAA),
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
+
+const _labelStyle = TextStyle(
+  fontSize: 11,
+  letterSpacing: 1.5,
+  color: Color(0xFFAAAAAA),
+);

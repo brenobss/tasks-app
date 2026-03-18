@@ -5,6 +5,7 @@ class Task {
   final String priority;
   final String status;
   final int userId;
+  final String? createdAt;
 
   Task({
     this.id,
@@ -13,6 +14,7 @@ class Task {
     required this.priority,
     this.status = 'PENDING',
     required this.userId,
+    this.createdAt,
   });
 
   factory Task.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Task {
       priority: json['priority'],
       status: json['status'],
       userId: json['user']['id'],
+      createdAt: json['createdAt'] ?? '',
     );
   }
 
@@ -45,7 +48,7 @@ class Task {
     };
   }
 
-  Task copyWith({String? status}) {
+  Task copyWith({String? status, String? createdAt}) {
     return Task(
       id: id,
       title: title,
@@ -53,6 +56,7 @@ class Task {
       priority: priority,
       status: status ?? this.status,
       userId: userId,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
